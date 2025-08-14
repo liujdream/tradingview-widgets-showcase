@@ -2,10 +2,16 @@
 
 A modern, responsive web application showcasing various TradingView widgets for real-time financial data visualization.
 
+## 🆕 Optimized Version Available!
+
+We've added an **optimized version** (`optimized.html`) with advanced features based on TradingView's best practices for handling multiple widgets.
+
 ## 🚀 Quick Start
 
 1. Clone or download this repository
-2. Open `tradingview-widgets-showcase/index.html` in your web browser
+2. Choose your version:
+   - **Standard**: Open `tradingview-widgets-showcase/index.html`
+   - **Optimized**: Open `tradingview-widgets-showcase/optimized.html`
 3. No installation or build process required!
 
 ## 📊 Featured Widgets
@@ -41,13 +47,35 @@ A modern, responsive web application showcasing various TradingView widgets for 
 
 ```
 tradingview-widgets-showcase/
-├── index.html       # Main application file
+├── index.html           # Standard showcase
+├── optimized.html       # Optimized version with advanced features
 ├── css/
-│   └── styles.css   # Styling and animations
+│   └── styles.css       # Styling and animations
 ├── js/
-│   └── main.js      # Interactive features
-└── assets/          # Additional resources
+│   ├── main.js          # Interactive features
+│   └── widget-config.js # Widget configuration system
+└── assets/              # Additional resources
 ```
+
+## 🎯 Optimization Features (optimized.html)
+
+### Performance Enhancements
+- **Lazy Loading**: Widgets load only when visible in viewport
+- **Progressive Loading**: Staggered widget initialization to prevent browser blocking
+- **On-Demand Loading**: Market overview loads only when requested
+- **Performance Monitoring**: Real-time widget count and load time tracking
+
+### Dynamic Features
+- **Query String Support**: Load specific symbols via URL parameters (e.g., `?tvwidgetsymbol=NASDAQ:AAPL`)
+- **Dynamic Widget Creation**: Select and load widgets for any symbol on-the-fly
+- **Centralized Configuration**: Single source of truth for all widget settings
+- **Symbol Mapping System**: Easy management of symbol lists
+
+### Best Practices Implementation
+- Follows TradingView's recommendations for multiple widgets
+- Optimized script loading order
+- Efficient DOM manipulation
+- Memory-conscious widget management
 
 ## 🛠️ Customization
 

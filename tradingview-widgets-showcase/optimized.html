@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradingView Widgets Showcase - Optimized</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .loading-indicator {
+            padding: 20px;
+            text-align: center;
+            color: #787b86;
+            font-size: 14px;
+        }
+        .widget-placeholder {
+            min-height: 200px;
+            background: linear-gradient(90deg, #f0f3fa 25%, #e0e3eb 50%, #f0f3fa 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .performance-stats {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 12px;
+            z-index: 9999;
+        }
+        .symbol-selector {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0f3fa;
+            border-radius: 8px;
+        }
+        .symbol-selector select {
+            padding: 8px 12px;
+            border: 1px solid #e0e3eb;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .dynamic-widget-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">TradingView Widgets - Optimized</h1>
+            <ul class="nav-menu">
+                <li><a href="#dynamic">Dynamic</a></li>
+                <li><a href="#tickers">Tickers</a></li>
+                <li><a href="#watchlist">Watchlist</a></li>
+                <li><a href="#charts">Charts</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Dynamic Symbol Section -->
+        <section id="dynamic" class="section">
+            <div class="container">
+                <h2 class="section-title">Dynamic Symbol Widgets</h2>
+                
+                <div class="symbol-selector">
+                    <label for="symbolSelect">Select Symbol:</label>
+                    <select id="symbolSelect">
+                        <option value="NASDAQ:AAPL">Apple (AAPL)</option>
+                        <option value="NASDAQ:GOOGL">Google (GOOGL)</option>
+                        <option value="NASDAQ:TSLA">Tesla (TSLA)</option>
+                        <option value="NASDAQ:META">Meta (META)</option>
+                        <option value="NASDAQ:NVDA">NVIDIA (NVDA)</option>
+                        <option value="NASDAQ:MSFT">Microsoft (MSFT)</option>
+                        <option value="NASDAQ:AMZN">Amazon (AMZN)</option>
+                        <option value="OTC:XIACY">Xiaomi (XIACY)</option>
+                    </select>
+                    <button id="loadWidgets" class="btn">Load Widgets</button>
+                    <button id="clearWidgets" class="btn btn-secondary">Clear</button>
+                </div>
+
+                <div id="dynamicWidgets" class="dynamic-widget-container">
+                    <p class="loading-indicator">Select a symbol and click "Load Widgets" to display dynamic widgets</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Optimized Ticker Tape -->
+        <section id="ticker-tape" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Ticker Tape (Lazy Loaded)</h2>
+                <div class="widget-container" data-widget-type="ticker-tape">
+                    <div class="widget-placeholder"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Single Tickers with Lazy Loading -->
+        <section id="tickers" class="section">
+            <div class="container">
+                <h2 class="section-title">Single Tickers (Progressive Loading)</h2>
+                <div class="tickers-grid" id="tickersGrid">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Watchlist Section -->
+        <section id="watchlist" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Market Overview (On-Demand)</h2>
+                <button id="loadMarketOverview" class="btn">Load Market Overview</button>
+                <div id="marketOverviewContainer" class="widget-container" style="display: none;">
+                    <!-- Widget loads here on demand -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section id="charts" class="section">
+            <div class="container">
+                <h2 class="section-title">Advanced Chart</h2>
+                <div class="widget-container" data-widget-type="advanced-chart">
+                    <div class="widget-placeholder"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Performance Monitor -->
+    <div class="performance-stats" id="perfStats">
+        <div>Widgets: <span id="widgetCount">0</span></div>
+        <div>Load Time: <span id="loadTime">-</span>ms</div>
+    </div>
+
+    <script src="js/widget-config.js"></script>
+    <script>
+        // Initialize performance monitoring
+        WidgetConfig.monitorPerformance();
+
+        // Check for query string symbol
+        const querySymbol = WidgetConfig.getSymbolFromQuery();
+        if (querySymbol) {
+            document.getElementById('symbolSelect').value = querySymbol;
+        }
+
+        // Dynamic widget loading
+        document.getElementById('loadWidgets').addEventListener('click', () => {
+            const symbol = document.getElementById('symbolSelect').value;
+            const container = document.getElementById('dynamicWidgets');
+            
+            // Clear existing content
+            container.innerHTML = `
+                <h3>Widgets for ${symbol}</h3>
+                <div class="widget-wrapper">
+                    <h4>Mini Chart</h4>
+                    <div class="tradingview-widget-container" id="miniChart"></div>
+                </div>
+                <div class="widget-wrapper">
+                    <h4>Technical Analysis</h4>
+                    <div class="tradingview-widget-container" id="techAnalysis"></div>
+                </div>
+                <div class="widget-wrapper">
+                    <h4>Company Profile</h4>
+                    <div class="tradingview-widget-container" id="companyProfile"></div>
+                </div>
+            `;
+
+            // Load widgets dynamically
+            setTimeout(() => {
+                // Mini Chart
+                const miniChartScript = document.createElement('script');
+                miniChartScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
+                miniChartScript.async = true;
+                miniChartScript.innerHTML = JSON.stringify({
+                    symbol: symbol,
+                    width: '100%',
+                    height: 220,
+                    locale: 'en',
+                    dateRange: '1D',
+                    colorTheme: 'light',
+                    trendLineColor: 'rgba(41, 98, 255, 1)',
+                    underLineColor: 'rgba(41, 98, 255, 0.3)',
+                    underLineBottomColor: 'rgba(41, 98, 255, 0)',
+                    isTransparent: false,
+                    autosize: false,
+                    largeChartUrl: ''
+                });
+                document.getElementById('miniChart').appendChild(miniChartScript);
+
+                // Technical Analysis
+                const techScript = document.createElement('script');
+                techScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js';
+                techScript.async = true;
+                techScript.innerHTML = JSON.stringify({
+                    interval: '1m',
+                    width: '100%',
+                    isTransparent: false,
+                    height: 450,
+                    symbol: symbol,
+                    showIntervalTabs: true,
+                    locale: 'en',
+                    colorTheme: 'light'
+                });
+                document.getElementById('techAnalysis').appendChild(techScript);
+
+                // Company Profile
+                const profileScript = document.createElement('script');
+                profileScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js';
+                profileScript.async = true;
+                profileScript.innerHTML = JSON.stringify({
+                    width: '100%',
+                    height: 480,
+                    isTransparent: false,
+                    colorTheme: 'light',
+                    symbol: symbol,
+                    locale: 'en'
+                });
+                document.getElementById('companyProfile').appendChild(profileScript);
+
+                updateWidgetCount();
+            }, 100);
+        });
+
+        // Clear widgets
+        document.getElementById('clearWidgets').addEventListener('click', () => {
+            document.getElementById('dynamicWidgets').innerHTML = 
+                '<p class="loading-indicator">Select a symbol and click "Load Widgets" to display dynamic widgets</p>';
+            updateWidgetCount();
+        });
+
+        // Progressive ticker loading
+        function loadTickers() {
+            const grid = document.getElementById('tickersGrid');
+            const symbols = WidgetConfig.symbols.tech;
+            
+            symbols.forEach((stock, index) => {
+                const tickerDiv = document.createElement('div');
+                tickerDiv.className = 'ticker-item';
+                tickerDiv.innerHTML = `
+                    <div class="tradingview-widget-container" data-symbol="${WidgetConfig.getFormattedSymbol(stock.exchange, stock.symbol)}">
+                        <div class="widget-placeholder"></div>
+                    </div>
+                `;
+                grid.appendChild(tickerDiv);
+
+                // Staggered loading
+                setTimeout(() => {
+                    const container = tickerDiv.querySelector('.tradingview-widget-container');
+                    const script = document.createElement('script');
+                    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js';
+                    script.async = true;
+                    script.innerHTML = JSON.stringify({
+                        symbol: container.dataset.symbol,
+                        width: '100%',
+                        isTransparent: false,
+                        colorTheme: 'light',
+                        locale: 'en'
+                    });
+                    container.innerHTML = '';
+                    container.appendChild(script);
+                    updateWidgetCount();
+                }, index * 200); // 200ms delay between each widget
+            });
+        }
+
+        // Load market overview on demand
+        document.getElementById('loadMarketOverview').addEventListener('click', function() {
+            const container = document.getElementById('marketOverviewContainer');
+            container.style.display = 'block';
+            this.style.display = 'none';
+
+            const script = document.createElement('script');
+            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js';
+            script.async = true;
+            script.innerHTML = JSON.stringify({
+                colorTheme: 'light',
+                dateRange: '12M',
+                showChart: true,
+                locale: 'en',
+                width: '100%',
+                height: '660',
+                largeChartUrl: '',
+                isTransparent: false,
+                showSymbolLogo: true,
+                showFloatingTooltip: false,
+                plotLineColorGrowing: 'rgba(41, 98, 255, 1)',
+                plotLineColorFalling: 'rgba(41, 98, 255, 1)',
+                gridLineColor: 'rgba(42, 46, 57, 0)',
+                scaleFontColor: 'rgba(134, 137, 147, 1)',
+                belowLineFillColorGrowing: 'rgba(41, 98, 255, 0.12)',
+                belowLineFillColorFalling: 'rgba(41, 98, 255, 0.12)',
+                belowLineFillColorGrowingBottom: 'rgba(41, 98, 255, 0)',
+                belowLineFillColorFallingBottom: 'rgba(41, 98, 255, 0)',
+                symbolActiveColor: 'rgba(41, 98, 255, 0.12)',
+                tabs: [
+                    {
+                        title: 'Indices',
+                        symbols: [
+                            {s: 'FOREXCOM:SPXUSD', d: 'S&P 500 Index'},
+                            {s: 'FOREXCOM:NSXUSD', d: 'US 100 Cash CFD'},
+                            {s: 'FOREXCOM:DJI', d: 'Dow Jones'}
+                        ]
+                    },
+                    {
+                        title: 'Futures',
+                        symbols: [
+                            {s: 'CME_MINI:ES1!', d: 'S&P 500'},
+                            {s: 'CME:6E1!', d: 'Euro'},
+                            {s: 'COMEX:GC1!', d: 'Gold'}
+                        ]
+                    }
+                ]
+            });
+            container.appendChild(script);
+            updateWidgetCount();
+        });
+
+        // Lazy load widgets on scroll
+        const lazyWidgets = document.querySelectorAll('[data-widget-type]');
+        const widgetObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const widget = entry.target;
+                    const type = widget.dataset.widgetType;
+                    
+                    if (type === 'ticker-tape') {
+                        const script = document.createElement('script');
+                        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+                        script.async = true;
+                        script.innerHTML = JSON.stringify({
+                            symbols: WidgetConfig.getTickerTapeSymbols(),
+                            showSymbolLogo: true,
+                            isTransparent: false,
+                            displayMode: 'adaptive',
+                            colorTheme: 'light',
+                            locale: 'en'
+                        });
+                        widget.innerHTML = '';
+                        widget.appendChild(script);
+                        updateWidgetCount();
+                    } else if (type === 'advanced-chart') {
+                        const defaultSymbol = querySymbol || 'NASDAQ:AAPL';
+                        const script = document.createElement('script');
+                        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+                        script.async = true;
+                        script.innerHTML = JSON.stringify({
+                            autosize: true,
+                            symbol: defaultSymbol,
+                            interval: 'D',
+                            timezone: 'Etc/UTC',
+                            theme: 'light',
+                            style: '1',
+                            locale: 'en',
+                            enable_publishing: false,
+                            allow_symbol_change: true,
+                            calendar: false,
+                            support_host: 'https://www.tradingview.com'
+                        });
+                        widget.innerHTML = '';
+                        widget.appendChild(script);
+                        widget.style.height = '500px';
+                        updateWidgetCount();
+                    }
+                    
+                    widgetObserver.unobserve(widget);
+                }
+            });
+        }, {
+            rootMargin: '100px'
+        });
+
+        lazyWidgets.forEach(widget => widgetObserver.observe(widget));
+
+        // Update widget count
+        function updateWidgetCount() {
+            const count = document.querySelectorAll('script[src*="tradingview.com"]').length;
+            document.getElementById('widgetCount').textContent = count;
+        }
+
+        // Load time tracking
+        window.addEventListener('load', () => {
+            if (window.performance && window.performance.timing) {
+                const timing = window.performance.timing;
+                const loadTime = timing.loadEventEnd - timing.navigationStart;
+                document.getElementById('loadTime').textContent = loadTime;
+            }
+
+            // Load tickers after page load
+            setTimeout(loadTickers, 500);
+        });
+
+        // Add custom styles for buttons
+        const style = document.createElement('style');
+        style.textContent = `
+            .btn {
+                padding: 10px 20px;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: var(--transition);
+            }
+            .btn:hover {
+                background: #1948d6;
+            }
+            .btn-secondary {
+                background: var(--text-light);
+                margin-left: 10px;
+            }
+            .btn-secondary:hover {
+                background: #5a5d68;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
