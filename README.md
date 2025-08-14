@@ -2,9 +2,11 @@
 
 A modern, responsive web application showcasing various TradingView widgets for real-time financial data visualization.
 
-## 🆕 Optimized Version Available!
+## 🆕 New Features Available!
 
-We've added an **optimized version** (`optimized.html`) with advanced features based on TradingView's best practices for handling multiple widgets.
+- **Optimized Version** (`optimized.html`) - Performance-focused with lazy loading
+- **Advanced Version** (`advanced.html`) - Template-based dynamic page builder
+- **Extended Hours** (`extended-hours.html`) - Pre-market and post-market data display
 
 ## 🚀 Quick Start
 
@@ -12,13 +14,16 @@ We've added an **optimized version** (`optimized.html`) with advanced features b
 2. Choose your version:
    - **Standard**: Open `tradingview-widgets-showcase/index.html`
    - **Optimized**: Open `tradingview-widgets-showcase/optimized.html`
+   - **Advanced**: Open `tradingview-widgets-showcase/advanced.html`
+   - **Extended Hours**: Open `tradingview-widgets-showcase/extended-hours.html` (Pre/Post Market)
 3. No installation or build process required!
 
 ## 📊 Featured Widgets
 
 ### 1. **Tickers**
-   - Single ticker widgets for major tech stocks (AAPL, GOOGL, TSLA, META, NVDA, MSFT, AMZN)
+   - Single ticker widgets for major tech stocks (AAPL, GOOGL, TSLA, META, NVDA, MSFT, AMZN, XIACY)
    - Continuous ticker tape with real-time price updates
+   - Symbol Info cards with pre-market and post-market data
 
 ### 2. **Watchlist Widgets**
    - **Market Overview**: Multi-tab view of Indices, Futures, and Forex
@@ -47,14 +52,18 @@ We've added an **optimized version** (`optimized.html`) with advanced features b
 
 ```
 tradingview-widgets-showcase/
-├── index.html           # Standard showcase
-├── optimized.html       # Optimized version with advanced features
+├── index.html             # Standard showcase
+├── optimized.html         # Performance optimized version
+├── advanced.html          # Template-based page builder
+├── extended-hours.html    # Pre/Post market data display
 ├── css/
-│   └── styles.css       # Styling and animations
+│   ├── styles.css         # Main styling
+│   └── responsive-widgets.css # Responsive widget sizing
 ├── js/
-│   ├── main.js          # Interactive features
-│   └── widget-config.js # Widget configuration system
-└── assets/              # Additional resources
+│   ├── main.js            # Interactive features
+│   ├── widget-config.js   # Widget configuration system
+│   └── lazy-load.js       # Custom lazy loading component
+└── assets/                # Additional resources
 ```
 
 ## 🎯 Optimization Features (optimized.html)
@@ -76,6 +85,25 @@ tradingview-widgets-showcase/
 - Optimized script loading order
 - Efficient DOM manipulation
 - Memory-conscious widget management
+
+## 📈 Extended Hours Trading (extended-hours.html)
+
+### Pre-Market & Post-Market Features
+- **Symbol Info Widget**: Best option for displaying extended hours data
+- Shows regular session price ("At close") and extended hours prices
+- Displays Pre-Market (4:00 AM - 9:30 AM ET) data when active
+- Shows Post-Market (4:00 PM - 8:00 PM ET) data when available
+- Includes timestamp for extended hours prices
+
+### Key Benefits
+- Real-time pre-market and after-hours price updates
+- Compact "quote card" design perfect for dashboards
+- Side-by-side comparison of different widget types
+- Support for all major US exchanges
+
+### Usage
+- Direct access: `extended-hours.html`
+- With specific symbol: `extended-hours.html?symbol=NASDAQ:AAPL`
 
 ## 🛠️ Customization
 

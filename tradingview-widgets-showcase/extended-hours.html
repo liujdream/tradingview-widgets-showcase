@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradingView Extended Hours - Pre/Post Market Data</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive-widgets.css">
+    <style>
+        .extended-hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .symbol-info-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .symbol-info-card h3 {
+            margin: 0 0 1rem 0;
+            color: #131722;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #2962ff;
+            padding-bottom: 0.5rem;
+        }
+        
+        .info-section {
+            margin: 3rem 0;
+        }
+        
+        .info-box {
+            background: #f0f3fa;
+            border-left: 4px solid #2962ff;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .info-box h4 {
+            margin: 0 0 0.5rem 0;
+            color: #2962ff;
+        }
+        
+        .info-box p {
+            margin: 0.5rem 0;
+            color: #787b86;
+        }
+        
+        .comparison-section {
+            margin: 2rem 0;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Extended Hours Trading</h1>
+            <ul class="nav-menu">
+                <li><a href="#symbol-info">Symbol Info</a></li>
+                <li><a href="#market-movers">Pre-Market Movers</a></li>
+                <li><a href="#comparison">Widget Comparison</a></li>
+                <li><a href="index.html">Standard</a></li>
+                <li><a href="advanced.html">Advanced</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Information Section -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Pre-Market & Post-Market Data Display</h2>
+                
+                <div class="info-section">
+                    <div class="info-box">
+                        <h4>🎯 Symbol Info Widget - Best for Extended Hours</h4>
+                        <p>The Symbol Info widget (compact "quote card") is the optimal choice for displaying pre-market and post-market data.</p>
+                        <p>✅ Shows regular session price ("At close")</p>
+                        <p>✅ Displays Pre Market/Post Market prices when extended session is active</p>
+                        <p>✅ Includes timestamp for extended hours data</p>
+                        <p>✅ Compact design perfect for dashboards</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Symbol Info Cards Section -->
+        <section id="symbol-info" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Symbol Info Cards with Extended Hours</h2>
+                <p style="text-align: center; color: #787b86; margin-bottom: 2rem;">
+                    These widgets will show pre-market data (4:00 AM - 9:30 AM ET) and post-market data (4:00 PM - 8:00 PM ET) when available.
+                </p>
+                
+                <div class="extended-hours-grid">
+                    <!-- Apple Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>AAPL - Apple Inc.</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "NASDAQ:AAPL",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+
+                    <!-- Google Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>GOOGL - Alphabet Inc.</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "NASDAQ:GOOGL",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+
+                    <!-- Tesla Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>TSLA - Tesla Inc.</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "NASDAQ:TSLA",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+
+                    <!-- Microsoft Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>MSFT - Microsoft Corp.</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "NASDAQ:MSFT",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+
+                    <!-- NVIDIA Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>NVDA - NVIDIA Corp.</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "NASDAQ:NVDA",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+
+                    <!-- Meta Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>META - Meta Platforms</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "NASDAQ:META",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+
+                    <!-- Amazon Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>AMZN - Amazon.com Inc.</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "NASDAQ:AMZN",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+
+                    <!-- Xiaomi Symbol Info -->
+                    <div class="symbol-info-card">
+                        <h3>XIACY - Xiaomi Corp.</h3>
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                            {
+                                "symbol": "OTC:XIACY",
+                                "width": "100%",
+                                "locale": "en",
+                                "colorTheme": "light",
+                                "isTransparent": false
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pre-Market Movers -->
+        <section id="market-movers" class="section">
+            <div class="container">
+                <h2 class="section-title">Pre-Market & After-Hours Movers</h2>
+                
+                <div class="widget-wrapper">
+                    <h3>Hot Lists - Including Extended Hours Activity</h3>
+                    <div class="widget-container">
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
+                            {
+                                "colorTheme": "light",
+                                "dateRange": "1D",
+                                "exchange": "US",
+                                "showChart": true,
+                                "locale": "en",
+                                "width": "100%",
+                                "height": "600",
+                                "largeChartUrl": "",
+                                "isTransparent": false,
+                                "showSymbolLogo": true,
+                                "showFloatingTooltip": false,
+                                "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+                                "plotLineColorFalling": "rgba(41, 98, 255, 1)",
+                                "gridLineColor": "rgba(42, 46, 57, 0)",
+                                "scaleFontColor": "rgba(134, 137, 147, 1)",
+                                "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+                                "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
+                                "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+                                "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
+                                "symbolActiveColor": "rgba(41, 98, 255, 0.12)"
+                            }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Widget Comparison -->
+        <section id="comparison" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Widget Comparison: Symbol Info vs Single Quote</h2>
+                
+                <div class="comparison-section">
+                    <p style="text-align: center; color: #787b86;">
+                        Compare how different widgets display extended hours data for the same symbol (AAPL)
+                    </p>
+                    
+                    <div class="comparison-grid">
+                        <div class="widget-wrapper">
+                            <h3>Symbol Info (Recommended for Extended Hours)</h3>
+                            <p style="color: #787b86; font-size: 0.9rem; margin-bottom: 1rem;">
+                                ✅ Shows Pre/Post Market prices when active<br>
+                                ✅ Displays "At close" for regular session<br>
+                                ✅ Includes extended hours timestamp
+                            </p>
+                            <!-- TradingView Widget BEGIN -->
+                            <div class="tradingview-widget-container">
+                                <div class="tradingview-widget-container__widget"></div>
+                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
+                                {
+                                    "symbol": "NASDAQ:AAPL",
+                                    "width": "100%",
+                                    "locale": "en",
+                                    "colorTheme": "light",
+                                    "isTransparent": false
+                                }
+                                </script>
+                            </div>
+                            <!-- TradingView Widget END -->
+                        </div>
+                        
+                        <div class="widget-wrapper">
+                            <h3>Single Quote (Basic Display)</h3>
+                            <p style="color: #787b86; font-size: 0.9rem; margin-bottom: 1rem;">
+                                ⚠️ May not show extended hours clearly<br>
+                                ⚠️ Focus on regular trading session<br>
+                                ⚠️ Less detailed time information
+                            </p>
+                            <!-- TradingView Widget BEGIN -->
+                            <div class="tradingview-widget-container">
+                                <div class="tradingview-widget-container__widget"></div>
+                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+                                {
+                                    "symbol": "NASDAQ:AAPL",
+                                    "width": "100%",
+                                    "isTransparent": false,
+                                    "colorTheme": "light",
+                                    "locale": "en"
+                                }
+                                </script>
+                            </div>
+                            <!-- TradingView Widget END -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation Guide -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Implementation Guide</h2>
+                
+                <div class="info-box">
+                    <h4>When to Use Symbol Info Widget</h4>
+                    <p>• Building a pre-market dashboard</p>
+                    <p>• Showing after-hours trading activity</p>
+                    <p>• Displaying comprehensive quote information</p>
+                    <p>• Creating compact quote cards for multiple symbols</p>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Extended Hours Trading Times (US Markets)</h4>
+                    <p>• Pre-Market: 4:00 AM - 9:30 AM ET</p>
+                    <p>• Regular Session: 9:30 AM - 4:00 PM ET</p>
+                    <p>• Post-Market: 4:00 PM - 8:00 PM ET</p>
+                    <p>Note: Extended hours data availability depends on the exchange and symbol.</p>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Dynamic Symbol Loading</h4>
+                    <p>You can dynamically load any symbol with extended hours data using query parameters:</p>
+                    <p><code>extended-hours.html?symbol=NASDAQ:AAPL</code></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TradingView Widgets - Extended Hours Trading. Data provided by TradingView.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Check for query string symbol
+        const urlParams = new URLSearchParams(window.location.search);
+        const querySymbol = urlParams.get('symbol');
+        
+        if (querySymbol) {
+            // Add a dynamic symbol info widget for the queried symbol
+            const container = document.querySelector('.extended-hours-grid');
+            const card = document.createElement('div');
+            card.className = 'symbol-info-card';
+            card.style.gridColumn = 'span 2';
+            card.innerHTML = `
+                <h3>Custom Symbol: ${querySymbol}</h3>
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                </div>
+            `;
+            
+            container.insertBefore(card, container.firstChild);
+            
+            // Load the widget
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js';
+            script.innerHTML = JSON.stringify({
+                symbol: querySymbol,
+                width: '100%',
+                locale: 'en',
+                colorTheme: 'light',
+                isTransparent: false
+            });
+            
+            card.querySelector('.tradingview-widget-container').appendChild(script);
+        }
+        
+        // Add time display
+        function updateMarketStatus() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const et = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+            const etHours = et.getHours();
+            const etMinutes = et.getMinutes();
+            
+            let status = '';
+            if (etHours >= 4 && etHours < 9.5) {
+                status = '🟡 Pre-Market Active';
+            } else if (etHours >= 9.5 && etHours < 16) {
+                status = '🟢 Market Open';
+            } else if (etHours >= 16 && etHours < 20) {
+                status = '🟠 After-Hours Active';
+            } else {
+                status = '🔴 Market Closed';
+            }
+            
+            const statusElement = document.getElementById('marketStatus');
+            if (statusElement) {
+                statusElement.textContent = status;
+            }
+        }
+        
+        // Update market status every minute
+        setInterval(updateMarketStatus, 60000);
+        updateMarketStatus();
+    </script>
+</body>
+</html>
