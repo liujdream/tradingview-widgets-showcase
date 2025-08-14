@@ -1,0 +1,289 @@
+/* Responsive Widget Sizing - Based on TradingView Best Practices */
+
+/* Widget Container Base Styles */
+.widget-container-responsive {
+    width: 100%;
+    position: relative;
+    background: var(--background-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+/* Fixed Height Containers for Different Widget Types */
+.widget-container-ticker {
+    height: 70px;
+    min-height: 70px;
+}
+
+.widget-container-chart-small {
+    height: 220px;
+    min-height: 220px;
+}
+
+.widget-container-chart-medium {
+    height: 400px;
+    min-height: 400px;
+}
+
+.widget-container-chart-large {
+    height: 600px;
+    min-height: 600px;
+}
+
+.widget-container-technical {
+    height: 450px;
+    min-height: 450px;
+}
+
+.widget-container-profile {
+    height: 480px;
+    min-height: 480px;
+}
+
+.widget-container-news {
+    height: 500px;
+    min-height: 500px;
+}
+
+.widget-container-overview {
+    height: 660px;
+    min-height: 660px;
+}
+
+/* Responsive Grid System */
+.widget-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.widget-grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+}
+
+.widget-grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.widget-grid-4 {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Aspect Ratio Containers */
+.widget-aspect-16-9 {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    min-height: 300px;
+}
+
+.widget-aspect-4-3 {
+    aspect-ratio: 4 / 3;
+    height: auto;
+    min-height: 400px;
+}
+
+.widget-aspect-1-1 {
+    aspect-ratio: 1 / 1;
+    height: auto;
+    min-height: 350px;
+}
+
+/* Mobile-First Responsive Breakpoints */
+@media (max-width: 1200px) {
+    .widget-container-chart-large {
+        height: 500px;
+    }
+    
+    .widget-container-overview {
+        height: 550px;
+    }
+    
+    .widget-grid-4 {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .widget-container-chart-medium {
+        height: 350px;
+    }
+    
+    .widget-container-chart-large {
+        height: 450px;
+    }
+    
+    .widget-grid-3 {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    .widget-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .widget-container-chart-small {
+        height: 200px;
+    }
+    
+    .widget-container-chart-medium {
+        height: 300px;
+    }
+    
+    .widget-container-chart-large {
+        height: 400px;
+    }
+    
+    .widget-container-technical {
+        height: 400px;
+    }
+    
+    .widget-container-overview {
+        height: 500px;
+    }
+    
+    .widget-grid-3,
+    .widget-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .widget-container-chart-small {
+        height: 180px;
+    }
+    
+    .widget-container-chart-medium {
+        height: 250px;
+    }
+    
+    .widget-container-chart-large {
+        height: 350px;
+    }
+    
+    .widget-container-technical {
+        height: 350px;
+    }
+    
+    .widget-container-profile {
+        height: 400px;
+    }
+    
+    .widget-container-news {
+        height: 450px;
+    }
+    
+    .widget-container-overview {
+        height: 450px;
+    }
+}
+
+/* Loading States */
+.widget-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: inherit;
+    color: var(--text-light);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Lazy Load Custom Element Styles */
+lazy-load {
+    display: block;
+    width: 100%;
+    min-height: inherit;
+}
+
+lazy-load[data-widget-type="ticker"] {
+    min-height: 70px;
+}
+
+lazy-load[data-widget-type="chart"] {
+    min-height: 400px;
+}
+
+lazy-load[data-widget-type="news"] {
+    min-height: 500px;
+}
+
+/* Performance Optimization Classes */
+.widget-priority-high {
+    /* Load immediately */
+    contain: layout;
+}
+
+.widget-priority-medium {
+    /* Load after high priority */
+    contain: layout style;
+}
+
+.widget-priority-low {
+    /* Load on demand */
+    contain: strict;
+    content-visibility: auto;
+}
+
+/* Widget Full-Width Mode */
+.widget-fullwidth {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Widget Sidebar Layout */
+.widget-layout-sidebar {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+}
+
+.widget-sidebar {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+@media (max-width: 992px) {
+    .widget-layout-sidebar {
+        grid-template-columns: 1fr;
+    }
+    
+    .widget-sidebar {
+        position: static;
+        max-height: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .widget-container-responsive {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .widget-loading,
+    .loading-spinner {
+        display: none;
+    }
+}

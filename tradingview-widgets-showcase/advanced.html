@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradingView Widgets - Advanced Optimization</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive-widgets.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">TradingView Advanced</h1>
+            <ul class="nav-menu">
+                <li><a href="#symbol-page">Symbol Page</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#comparison">Comparison</a></li>
+                <li><a href="index.html">Standard</a></li>
+                <li><a href="optimized.html">Optimized</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Dynamic Symbol Page Builder -->
+        <section id="symbol-page" class="section">
+            <div class="container">
+                <h2 class="section-title">Dynamic Symbol Page</h2>
+                
+                <!-- Symbol Navigation -->
+                <div class="symbol-selector">
+                    <input type="text" id="symbolInput" placeholder="Enter symbol (e.g., NASDAQ:AAPL)" value="NASDAQ:AAPL">
+                    <button id="buildPage" class="btn">Build Page</button>
+                    <select id="templateSelect">
+                        <option value="comprehensive">Comprehensive View</option>
+                        <option value="technical">Technical Analysis</option>
+                        <option value="fundamental">Fundamental View</option>
+                        <option value="news-focused">News & Sentiment</option>
+                    </select>
+                </div>
+
+                <!-- Dynamic Page Content -->
+                <div id="dynamicPage"></div>
+            </div>
+        </section>
+
+        <!-- Multi-Symbol Dashboard -->
+        <section id="dashboard" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Multi-Symbol Dashboard</h2>
+                
+                <div class="widget-grid widget-grid-3" id="dashboardGrid">
+                    <!-- Populated dynamically with lazy-loaded widgets -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Symbol Comparison -->
+        <section id="comparison" class="section">
+            <div class="container">
+                <h2 class="section-title">Symbol Comparison</h2>
+                
+                <div class="comparison-controls">
+                    <button id="addSymbol" class="btn">Add Symbol</button>
+                    <button id="clearComparison" class="btn btn-secondary">Clear All</button>
+                </div>
+                
+                <div id="comparisonContainer" class="widget-grid widget-grid-2">
+                    <!-- Comparison widgets load here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Performance Dashboard -->
+    <div class="performance-stats" id="perfMetrics">
+        <div>Loading...</div>
+    </div>
+
+    <script src="js/lazy-load.js"></script>
+    <script src="js/widget-config.js"></script>
+    <script>
+        // Initialize performance monitor
+        const perfMonitor = new PerformanceMonitor();
+
+        // Page Templates
+        const pageTemplates = {
+            comprehensive: {
+                name: 'Comprehensive View',
+                widgets: [
+                    { type: 'ticker-tape', priority: 10 },
+                    { type: 'symbol-info', priority: 9 },
+                    { type: 'advanced-chart', priority: 8, size: 'large' },
+                    { type: 'technical-analysis', priority: 7 },
+                    { type: 'company-profile', priority: 6 },
+                    { type: 'fundamental-data', priority: 5 },
+                    { type: 'news', priority: 4 }
+                ]
+            },
+            technical: {
+                name: 'Technical Analysis',
+                widgets: [
+                    { type: 'advanced-chart', priority: 10, size: 'large' },
+                    { type: 'technical-analysis', priority: 9 },
+                    { type: 'mini-chart', priority: 8, size: 'small' },
+                    { type: 'symbol-info', priority: 7 }
+                ]
+            },
+            fundamental: {
+                name: 'Fundamental View',
+                widgets: [
+                    { type: 'symbol-info', priority: 10 },
+                    { type: 'fundamental-data', priority: 9 },
+                    { type: 'company-profile', priority: 8 },
+                    { type: 'mini-chart', priority: 7, size: 'medium' }
+                ]
+            },
+            'news-focused': {
+                name: 'News & Sentiment',
+                widgets: [
+                    { type: 'ticker-tape', priority: 10 },
+                    { type: 'news', priority: 9 },
+                    { type: 'mini-chart', priority: 8, size: 'small' },
+                    { type: 'symbol-info', priority: 7 }
+                ]
+            }
+        };
+
+        // Widget configurations
+        const widgetConfigs = {
+            'ticker-tape': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js',
+                height: 'ticker',
+                createSettings: (symbol) => ({
+                    symbols: [
+                        { proName: symbol, title: symbol.split(':')[1] }
+                    ],
+                    showSymbolLogo: true,
+                    isTransparent: false,
+                    displayMode: 'adaptive',
+                    colorTheme: 'light',
+                    locale: 'en'
+                })
+            },
+            'symbol-info': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js',
+                height: 'auto',
+                createSettings: (symbol) => ({
+                    symbol: symbol,
+                    width: '100%',
+                    locale: 'en',
+                    colorTheme: 'light',
+                    isTransparent: false
+                })
+            },
+            'advanced-chart': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js',
+                height: 'large',
+                createSettings: (symbol) => ({
+                    autosize: true,
+                    symbol: symbol,
+                    interval: 'D',
+                    timezone: 'Etc/UTC',
+                    theme: 'light',
+                    style: '1',
+                    locale: 'en',
+                    enable_publishing: false,
+                    allow_symbol_change: true,
+                    calendar: false,
+                    support_host: 'https://www.tradingview.com'
+                })
+            },
+            'mini-chart': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js',
+                height: 'small',
+                createSettings: (symbol) => ({
+                    symbol: symbol,
+                    width: '100%',
+                    height: '100%',
+                    locale: 'en',
+                    dateRange: '1D',
+                    colorTheme: 'light',
+                    trendLineColor: 'rgba(41, 98, 255, 1)',
+                    underLineColor: 'rgba(41, 98, 255, 0.3)',
+                    underLineBottomColor: 'rgba(41, 98, 255, 0)',
+                    isTransparent: false,
+                    autosize: true,
+                    largeChartUrl: ''
+                })
+            },
+            'technical-analysis': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',
+                height: 'technical',
+                createSettings: (symbol) => ({
+                    interval: '1m',
+                    width: '100%',
+                    isTransparent: false,
+                    height: '100%',
+                    symbol: symbol,
+                    showIntervalTabs: true,
+                    locale: 'en',
+                    colorTheme: 'light'
+                })
+            },
+            'company-profile': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js',
+                height: 'profile',
+                createSettings: (symbol) => ({
+                    width: '100%',
+                    height: '100%',
+                    isTransparent: false,
+                    colorTheme: 'light',
+                    symbol: symbol,
+                    locale: 'en'
+                })
+            },
+            'fundamental-data': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-financials.js',
+                height: 'overview',
+                createSettings: (symbol) => ({
+                    colorTheme: 'light',
+                    isTransparent: false,
+                    largeChartUrl: '',
+                    displayMode: 'regular',
+                    width: '100%',
+                    height: '100%',
+                    symbol: symbol,
+                    locale: 'en'
+                })
+            },
+            'news': {
+                src: 'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js',
+                height: 'news',
+                createSettings: (symbol) => ({
+                    feedMode: 'symbol',
+                    symbol: symbol,
+                    isTransparent: false,
+                    displayMode: 'regular',
+                    width: '100%',
+                    height: '100%',
+                    colorTheme: 'light',
+                    locale: 'en'
+                })
+            }
+        };
+
+        // Create widget element with template
+        function createTemplatedWidget(type, symbol, size = 'medium') {
+            const config = widgetConfigs[type];
+            if (!config) return null;
+
+            // Create lazy-load element
+            const lazyElement = document.createElement('lazy-load');
+            lazyElement.setAttribute('data-widget-type', type);
+            
+            // Determine container class based on widget height
+            const heightClass = `widget-container-${config.height === 'auto' ? 'responsive' : `chart-${size || config.height}`}`;
+            lazyElement.className = `widget-container-responsive ${heightClass}`;
+
+            // Add loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'widget-loading';
+            loadingDiv.innerHTML = `
+                <div class="loading-spinner"></div>
+                <p>Loading ${type.replace('-', ' ')} widget...</p>
+            `;
+            lazyElement.appendChild(loadingDiv);
+
+            // Create template
+            const template = document.createElement('template');
+            
+            // Create widget container
+            const widgetDiv = document.createElement('div');
+            widgetDiv.className = 'tradingview-widget-container';
+            widgetDiv.style.height = '100%';
+            widgetDiv.style.width = '100%';
+            
+            // Create script
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.src = config.src;
+            script.textContent = JSON.stringify(config.createSettings(symbol));
+            
+            widgetDiv.appendChild(script);
+            template.content.appendChild(widgetDiv);
+            lazyElement.appendChild(template);
+            
+            return lazyElement;
+        }
+
+        // Build dynamic page
+        function buildDynamicPage(symbol, templateName) {
+            const container = document.getElementById('dynamicPage');
+            const template = pageTemplates[templateName];
+            
+            if (!template) return;
+            
+            // Clear existing content
+            container.innerHTML = `<h3>${template.name} for ${symbol}</h3>`;
+            
+            // Create widget grid
+            const grid = document.createElement('div');
+            grid.className = 'widget-grid widget-grid-2';
+            
+            // Add widgets based on template
+            template.widgets.forEach((widget, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'widget-wrapper';
+                
+                // Add title
+                const title = document.createElement('h4');
+                title.textContent = widget.type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                wrapper.appendChild(title);
+                
+                // Create widget
+                const widgetElement = createTemplatedWidget(widget.type, symbol, widget.size);
+                if (widgetElement) {
+                    wrapper.appendChild(widgetElement);
+                    grid.appendChild(wrapper);
+                    
+                    // Add to loading queue with priority
+                    setTimeout(() => {
+                        widgetLoader.addToQueue(widgetElement, widget.priority);
+                    }, index * 50);
+                }
+            });
+            
+            container.appendChild(grid);
+        }
+
+        // Event Listeners
+        document.getElementById('buildPage').addEventListener('click', () => {
+            const symbol = document.getElementById('symbolInput').value;
+            const template = document.getElementById('templateSelect').value;
+            
+            if (symbol) {
+                buildDynamicPage(symbol, template);
+            }
+        });
+
+        // Initialize dashboard with default symbols
+        function initDashboard() {
+            const symbols = ['NASDAQ:AAPL', 'NASDAQ:GOOGL', 'NASDAQ:MSFT', 'NASDAQ:NVDA', 'NASDAQ:TSLA', 'OTC:XIACY'];
+            const grid = document.getElementById('dashboardGrid');
+            
+            symbols.forEach((symbol, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'widget-wrapper';
+                
+                const title = document.createElement('h4');
+                title.textContent = symbol.split(':')[1];
+                wrapper.appendChild(title);
+                
+                const widget = createTemplatedWidget('mini-chart', symbol, 'small');
+                if (widget) {
+                    wrapper.appendChild(widget);
+                    grid.appendChild(wrapper);
+                    
+                    // Staggered loading
+                    setTimeout(() => {
+                        widgetLoader.addToQueue(widget, 5);
+                    }, index * 100);
+                }
+            });
+        }
+
+        // Symbol comparison
+        let comparisonSymbols = [];
+        
+        document.getElementById('addSymbol').addEventListener('click', () => {
+            const symbol = prompt('Enter symbol (e.g., NASDAQ:AAPL):');
+            if (symbol && !comparisonSymbols.includes(symbol)) {
+                comparisonSymbols.push(symbol);
+                updateComparison();
+            }
+        });
+        
+        document.getElementById('clearComparison').addEventListener('click', () => {
+            comparisonSymbols = [];
+            document.getElementById('comparisonContainer').innerHTML = '';
+        });
+        
+        function updateComparison() {
+            const container = document.getElementById('comparisonContainer');
+            container.innerHTML = '';
+            
+            comparisonSymbols.forEach((symbol, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'widget-wrapper';
+                
+                const title = document.createElement('h4');
+                title.textContent = symbol;
+                wrapper.appendChild(title);
+                
+                const widget = createTemplatedWidget('mini-chart', symbol, 'medium');
+                if (widget) {
+                    wrapper.appendChild(widget);
+                    container.appendChild(wrapper);
+                    
+                    setTimeout(() => {
+                        widgetLoader.addToQueue(widget, 3);
+                    }, index * 150);
+                }
+            });
+        }
+
+        // Check for query string parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const querySymbol = urlParams.get('tvwidgetsymbol');
+        const queryTemplate = urlParams.get('template');
+        
+        if (querySymbol) {
+            document.getElementById('symbolInput').value = querySymbol;
+            if (queryTemplate && pageTemplates[queryTemplate]) {
+                document.getElementById('templateSelect').value = queryTemplate;
+                buildDynamicPage(querySymbol, queryTemplate);
+            }
+        }
+
+        // Initialize dashboard on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initDashboard();
+        });
+
+        // Add custom styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .symbol-selector {
+                display: flex;
+                gap: 1rem;
+                margin: 2rem 0;
+                padding: 1.5rem;
+                background: var(--background-light);
+                border-radius: var(--border-radius);
+                flex-wrap: wrap;
+            }
+            
+            .symbol-selector input {
+                flex: 1;
+                min-width: 200px;
+                padding: 10px;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            
+            .symbol-selector select {
+                padding: 10px;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            
+            .comparison-controls {
+                margin: 2rem 0;
+                display: flex;
+                gap: 1rem;
+            }
+            
+            .widget-wrapper {
+                background: white;
+                border-radius: var(--border-radius);
+                padding: 1rem;
+                box-shadow: var(--shadow-sm);
+            }
+            
+            .widget-wrapper h4 {
+                margin: 0 0 1rem 0;
+                color: var(--text-color);
+                font-size: 1.1rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid var(--border-color);
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: var(--transition);
+            }
+            
+            .btn:hover {
+                background: #1948d6;
+                transform: translateY(-1px);
+            }
+            
+            .btn-secondary {
+                background: var(--text-light);
+            }
+            
+            .btn-secondary:hover {
+                background: #5a5d68;
+            }
+            
+            #perfMetrics {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                font-size: 12px;
+                z-index: 9999;
+                font-family: monospace;
+            }
+            
+            #perfMetrics div {
+                margin: 2px 0;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
